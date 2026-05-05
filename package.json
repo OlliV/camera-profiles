@@ -1,0 +1,1 @@
+{\n  "name": "camera-profile-generator",\n  "version": "1.0.0",\n  "main": "dist/index.js",\n  "scripts": {\n    "build": "tsc",\n    "start": "node dist/index.js",\n    "cli": "node dist/index.js"\n  },\n  "dependencies": {},\n  "devDependencies": {\n    "typescript": "^5.0.0"\n  }\n}
