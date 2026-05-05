@@ -12,7 +12,7 @@ npm run build
 ## Usage
 
 ```bash
-node dist/index.js input.cube -o Profile.xmp --name "My Profile" --input-color-space rec709
+node dist/index.js input.cube -o Profile.xmp --name "My Profile" --input-color-space rec709-gamma24
 ```
 
 ## Input Color Space
@@ -21,11 +21,15 @@ Use `--input-color-space` to tell the converter how the `.cube` values are encod
 
 Supported values:
 
-- `rec709` (default)
+- `rec709` (alias of `rec709-gamma24`)
+- `rec709-gamma24` (default, typical for display-referred grading LUTs from Resolve)
+- `rec709-oetf` (legacy camera OETF interpretation)
 - `srgb`
 - `adobe-rgb`
 - `linear-rec709`
 - `linear-adobe-rgb`
+
+If a Rec.709 LUT looks too bright/flat in Lightroom, use `rec709-gamma24`.
 
 The LUT samples are transformed into Adobe RGB table space before embedding, to match Lightroom RGB profile table expectations.
 

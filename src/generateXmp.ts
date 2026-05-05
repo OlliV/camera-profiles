@@ -4,6 +4,8 @@ import { CubeLut } from "./parseCube";
 
 export type InputColorSpace =
   | "rec709"
+  | "rec709-oetf"
+  | "rec709-gamma24"
   | "srgb"
   | "adobe-rgb"
   | "linear-rec709"
@@ -18,12 +20,21 @@ function clamp01(value: number): number {
 }
 
 const ADOBE_RGB_GAMMA = 563 / 256; // Adobe RGB (1998) nominal gamma.
+const REC709_DISPLAY_GAMMA = 2.4;
+
+function decodeRec709Oetf(v: number): number {
+  return v < 0.081 ? v / 4.5 : Math.pow((v + 0.099) / 1.099, 1 / 0.45);
+}
 
 function decodeTransfer(value: number, space: InputColorSpace): number {
   const v = clamp01(value);
   switch (space) {
+    // Most grading Rec.709 LUTs (for example from Resolve) target display gamma.
     case "rec709":
-      return v < 0.081 ? v / 4.5 : Math.pow((v + 0.099) / 1.099, 1 / 0.45);
+    case "rec709-gamma24":
+      return Math.pow(v, REC709_DISPLAY_GAMMA);
+    case "rec709-oetf":
+      return decodeRec709Oetf(v);
     case "srgb":
       return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
     case "adobe-rgb":

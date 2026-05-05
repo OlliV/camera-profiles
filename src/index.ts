@@ -15,6 +15,8 @@ interface CliOptions {
 
 type InputColorSpace =
   | "rec709"
+  | "rec709-oetf"
+  | "rec709-gamma24"
   | "srgb"
   | "adobe-rgb"
   | "linear-rec709"
@@ -24,6 +26,8 @@ type CubeOrder = "blue-fast" | "red-fast";
 
 const INPUT_COLOR_SPACES: ReadonlyArray<InputColorSpace> = [
   "rec709",
+  "rec709-oetf",
+  "rec709-gamma24",
   "srgb",
   "adobe-rgb",
   "linear-rec709",
@@ -38,13 +42,13 @@ function parseArgs(argv: string[]): CliOptions {
 
   if (!input) {
     throw new Error(
-      "Usage: node dist/index.js <input.cube> [-o output.xmp] [--name profile-name] [--input-color-space rec709|srgb|adobe-rgb|linear-rec709|linear-adobe-rgb] [--cube-order blue-fast|red-fast] [--description text] [--copyright text]"
+      "Usage: node dist/index.js <input.cube> [-o output.xmp] [--name profile-name] [--input-color-space rec709|rec709-gamma24|rec709-oetf|srgb|adobe-rgb|linear-rec709|linear-adobe-rgb] [--cube-order blue-fast|red-fast] [--description text] [--copyright text]"
     );
   }
 
   let output = input.replace(/\.cube$/i, ".xmp");
   let name = path.basename(output, ".xmp");
-  let inputColorSpace: InputColorSpace = "rec709";
+  let inputColorSpace: InputColorSpace = "rec709-gamma24";
   let cubeOrder: CubeOrder = "red-fast";
   let description: string | undefined;
   let copyright: string | undefined;
